@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+
 const authorizeUser = (permittedRoles)=>{
     return (req,res,next)=>{
         if(permittedRoles.includes(req.user.role)){

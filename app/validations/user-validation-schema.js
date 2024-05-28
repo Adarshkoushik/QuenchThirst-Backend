@@ -61,77 +61,7 @@ const userRegisterSchema = {
             options : [['admin','supplier','customer']],
             errorMessage : 'role should be Admin, Supplier or Customer'
         }
-    },
-    // building:{
-        // notEmpty:{
-        //     errorMessage:"Building cannot be empty."
-        // },
-        // isLength:{
-        //     options:{
-        //         min:2,
-        //     },
-        //     errorMessage:"At least 2 characters required."
-        // }
-    //     custom:{
-    //         options:async function (value, {req}){
-    //             try{
-    //                 if(req && req.role && req.role.includes('admin') || req.role.includes('customer')){
-    //                     if(!value || value.trim()==''){
-    //                         throw new Error('buliding details required')
-    //                     }
-    //                 }
-    //                 return true
-    //             }catch(err){
-    //                 throw new Error(err.message)
-    //             }
-    //         }
-    //     }
-    // },
-    // locality:{
-    //     notEmpty:{
-    //         errorMessage:"locality cannot be empty."
-    //     },
-    //     isLength:{
-    //         options:{min:2},
-    //         errorMessage:"At least 2 characters required."
-    //     }
-    // },
-    // city:{
-    //     notEmpty:{
-    //         errorMessage:"city cannot be empty."
-    //     },
-    //     isLength:{
-    //         options:{min:2},
-    //         errorMessage:"At least 2 characters required."
-    //     }
-    // },
-    // state:{
-    //     notEmpty:{
-    //         errorMessage:"state cannot be empty."
-    //     },
-    //     isLength:{
-    //         options:{min:2},
-    //         errorMessage:"At least 2 characters required."
-    //     }
-    // },
-    // pinCode:{
-    //     notEmpty:{
-    //         errorMessage:"pinCode cannot be empty."
-    //     },
-    //     isLength:{
-    //         options:{min:2},
-    //         errorMessage:"At least 2 characters required."
-    //     }
-    // },
-    // country:{
-    //     notEmpty:{
-    //         errorMessage:"country cannot be empty."
-    //     },
-    //     isLength:{
-    //         options:{min:2},
-    //         errorMessage:"Atleast 2 characters required."
-    //     }
-    // }
+    }
 }
 
 const verifyEmailAndOtpValidationSchema = {
@@ -204,13 +134,6 @@ const forgotPasswordValidation = {
         notEmpty: {
             errorMessage: 'password field must have some value'
         }
-        // isLength: {
-        //     options: { min: 8, max: 128 },
-        //     errorMessage: 'password field value must be between 8-128 characters'
-        // },
-        // isStrongPassword: {
-        //     errorMessage: 'password must have at least one uppercase, one number and one special character'
-        // }
     }
 }
 
@@ -222,13 +145,6 @@ const updatingPassword = {
         notEmpty: {
             errorMessage: 'password field must have some value'
         }
-        // isLength: {
-        //     options: { min: 8, max: 128 },
-        //     errorMessage: 'password field value must be between 8-128 characters'
-        // }
-        // isStrongPassword: {
-        //     errorMessage: 'password must have atleast one uppercase, one number and one special character'
-        // }
     },
     newPassword:{
         exists: {
@@ -237,13 +153,6 @@ const updatingPassword = {
         notEmpty: {
             errorMessage: 'password field must have some value'
         }
-        // isLength: {
-        //     options: { min: 8, max: 128 },
-        //     errorMessage: 'password field value must be between 8-128 characters'
-        // },
-        // isStrongPassword: {
-        //     errorMessage: 'password must have atleast one uppercase, one number and one special character'
-        // }
     }
 }
 
@@ -286,10 +195,6 @@ const loginValidationSchema = {
         notEmpty: {
             errorMessage: 'password field must have some value'
         }
-        // isLength: {
-        //     options: { min: 8, max: 128 },
-        //     errorMessage: 'password field value must be between 8-128 characters'
-        // }
     }
 }
 module.exports = {

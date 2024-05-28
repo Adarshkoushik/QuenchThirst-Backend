@@ -3,7 +3,7 @@ const cors = require('cors')
 const app = express()
 const {checkSchema} = require('express-validator')
 const port = 3100
-const User =require('./app/models/user-model')
+// const User =require('./app/models/user-model')
 
 app.use(cors())
 app.use(express.json())

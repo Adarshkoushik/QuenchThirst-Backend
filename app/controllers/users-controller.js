@@ -7,18 +7,12 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user-model')
 const { validationResult } = require('express-validator')
 const nodemailer = require('nodemailer')
-// const Supplier = require('../models/supplier-model')
-
-// function reverseLatLon(arr) {
-//     return [arr[1], arr[0]]
-//   }
 
 const usersController = {}
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
 const client = require('twilio')(accountSid,authToken);
-
 
 
 usersController.sendSMS = async(username,mobileNumber,role)=>{
@@ -74,8 +68,8 @@ usersController.sendConfirmMail = (recipientMail, recipientUsername, otp) => {
     mailSend().catch(console.error)
 }
 
-//To register a user to QT App
 
+//To register a user to QT App
 usersController.register = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -98,11 +92,7 @@ usersController.register = async (req, res) => {
         const count = await User.find().countDocuments()
         if (count === 0) {
             user.role = 'admin'
-            // user.isApproved = true
         }
-        // if (user.role.toLowerCase() === 'customer'){
-        //     user.isApproved = true
-        // }
         if(user.role  === 'customer'){
             const addressBody = _.pick(req.body,['building','locality','city','state','pinCode','country'])
             const searchString = `${addressBody.building}${addressBody.locality}${addressBody.city}${addressBody.state}${addressBody.pinCode}${addressBody.country}`
@@ -110,8 +100,7 @@ usersController.register = async (req, res) => {
             if(mapResponse.data.features.length==0){
                 return  res.status(400).json({errors:[{msg:"Invalid address",path:'invalid address'}]})
             }
-            const location = [mapResponse.data.features[0].properties.lon,mapResponse.data.features[0].properties.lat]
-            // user.location.coordinates =reverseLatLon(location) 
+            const location = [mapResponse.data.features[0].properties.lon,mapResponse.data.features[0].properties.lat] 
             user.location.coordinates =location 
             
         }

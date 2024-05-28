@@ -1,7 +1,7 @@
 const Payment = require('../models/payment-model')
 const Order = require('../models/orders-model')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
-//const _ = require('lodash')
+
 const paymentController = {}
 
 paymentController.create = async(req,res)=>{

@@ -58,6 +58,7 @@ function startDeletionProcess() {
   deletionTimeout = setTimeout(startDeletionProcess, 30 * 60 * 1000);
 }
 
+//to create a request 
 requestController.create = async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -74,25 +75,24 @@ requestController.create = async (req, res) => {
     //request.customerEmail = user1.email
     request.customerAddress = `${user1.building} ${user1.locality} ${user1.city} ${user1.pinCode}`
     const customerCoordinates = user1.location.coordinates
-
     //console.log("customer-cor", customerCoordinates)
-    const suppliers = await Supplier.find({ isApproved: true }).populate('userId', ['email', '_id'])//.populate('userId',['email'])
-    console.log("1-", suppliers)
+    const suppliers = await Supplier.find({ isApproved: true }).populate('userId', ['email', '_id'])
+    //console.log("1-", suppliers)
     const filteredSuppliers = suppliers.filter(ele => {
       const transformedSupplierCoordinates = {
         latitude: ele.location.coordinates[0],
         longitude: ele.location.coordinates[1]
       };
 
-      console.log("ele", transformedSupplierCoordinates);
+      //console.log("ele", transformedSupplierCoordinates);
 
       return isPointWithinRadius(transformedSupplierCoordinates, transformCoordinates(customerCoordinates), searchDistance)
 
       //isPointWithinRadius({latitude:42.24222,longitude:12.32452},{latitude:20.24222,longitude:11.32452},radius in m )
       //isPointWithinRadius(point,center point,distance from center point)
     })
-    console.log("customer-cord", transformCoordinates(customerCoordinates))
-    console.log("filteredsuplist", filteredSuppliers)
+    //console.log("customer-cord", transformCoordinates(customerCoordinates))
+    //console.log("filteredsuplist", filteredSuppliers)
     if (filteredSuppliers) {
       let emailArr = []
       for (let i = 0; i < filteredSuppliers.length; i++) {
@@ -207,7 +207,7 @@ requestController.accepted = async (req, res) => {
   try {
     const id = req.params.id
     const request = await Request.findByIdAndUpdate(id, { $set: { supplierId: req.user.id, status: 'accepted' } }, { new: true }).populate('vehicleTypeId').populate('customerId')
-    console.log("reuest =-----",request)
+    console.log("request =-----",request)
     const lineItemsArray = []
     lineItemsArray.push({
       'quantity': request.quantity,
@@ -238,7 +238,7 @@ requestController.accepted = async (req, res) => {
 
     const from = new Date(request.orderDate).setHours(0,0,0,0)
     const to = new Date(request.orderDate).setHours(23,59,59,999)
-    const recordCount = await Order.find({supplierId:req.user.id,orderDate:{$gte : from ,$lte :to}})//.countDocuments()//,orderDate:request.orderDate,'lineItems[0].purpose':request.purpose
+    const recordCount = await Order.find({supplierId:req.user.id,orderDate:{$gte : from ,$lte :to}})
     order.tokenNumber = recordCount.length + 1
     if(recordCount.length === 0){
       order.currentTokenNumber = 0
@@ -346,7 +346,7 @@ requestController.remove = async (req, res) => {
 
 requestController.reject = async (req, res) => {
   const requestId = req.params.id;
-  const supplierId = req.user.id; // Assuming you have authentication middleware to get the user ID
+  const supplierId = req.user.id; 
 
   try {
     const request = await Request.findById(requestId);

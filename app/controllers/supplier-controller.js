@@ -12,6 +12,31 @@ const reverseLatLon=(arr)=>{
 
 const supplierController = {}
 
+supplierController.create = async(req,res)=>{
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+    const body = req.body
+    try{
+        const supplier = new Supplier(body)
+        const addressBody = _.pick(req.body,['building','locality','city','state','pinCode','country'])
+        const searchString = `${addressBody.building}${addressBody.locality}${addressBody.city}${addressBody.state}${addressBody.pinCode}${addressBody.country}`
+        const  mapResponse =  await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${searchString}&apiKey=${process.env.GEOAPIFYKEY}`)
+        if(mapResponse.data.features.length==0){
+           return  res.status(400).json({errors:[{msg:"Invalid address",path:'invalid address'}]})
+        }
+        const location = [mapResponse.data.features[0].properties.lon,mapResponse.data.features[0].properties.lat]
+        supplier.location.coordinates = reverseLatLon(location)
+        supplier.userId = req.user.id
+        await supplier.save()
+        res.status(201).json(supplier)
+    } catch (err){
+        console.log(err)
+        res.status(500).json({error:'Internal Server error'})
+    }
+}
+
 supplierController.list = async (req,res)=>{
     const search=req.query.search ||''
     const sortBy=req.query.sortBy || ''
@@ -59,33 +84,7 @@ supplierController.account = async (req,res)=>{
     }
 }
 
-supplierController.create = async(req,res)=>{
-    const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()})
-    }
-    const body = req.body
-    try{
-        const supplier = new Supplier(body)
-        const addressBody = _.pick(req.body,['building','locality','city','state','pinCode','country'])
-        const searchString = `${addressBody.building}${addressBody.locality}${addressBody.city}${addressBody.state}${addressBody.pinCode}${addressBody.country}`
-        const  mapResponse =  await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${searchString}&apiKey=${process.env.GEOAPIFYKEY}`)
-        if(mapResponse.data.features.length==0){
-           return  res.status(400).json({errors:[{msg:"Invalid address",path:'invalid address'}]})
-        }
-        const location = [mapResponse.data.features[0].properties.lon,mapResponse.data.features[0].properties.lat]
-        supplier.location.coordinates = reverseLatLon(location)
-        // supplier.location.coordinates =location
-        // console.log("suppliers reversed coordinates-",supplier.location.coordinates)
 
-        supplier.userId = req.user.id
-        await supplier.save()
-        res.status(201).json(supplier)
-    } catch (err){
-        console.log(err)
-        res.status(500).json({error:'Internal Server error'})
-    }
-}
 
 supplierController.remove = async (req, res) => {
     try {
@@ -106,8 +105,6 @@ const transformToObj = (coordinates) => {
 }
 
 supplierController.findByLatAndLng=async(req,res)=>{
-    
-    // const {lat, lon}= req.query
     const radius=10
     // const centerCoordinates={
     //     latitude:lat,
@@ -132,9 +129,6 @@ supplierController.findByLatAndLng=async(req,res)=>{
                 // console.log("3-",r)
                 return isPointWithinRadius(ele.location.coordinates,centerCoordinates, parseFloat(radius*1000))
             })
-
-            //console.log("filteredSuppliers-",filteredSuppliers)
-
             res.json(filteredSuppliers)
         }              
         

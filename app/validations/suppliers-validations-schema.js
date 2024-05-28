@@ -1,14 +1,6 @@
 const Supplier = require("../models/supplier-model")
 
 const suppliersValidationSchema={
-  // userId:{
-  //   notEmpty:{
-  //     errorMessage:'userId is required'
-  //   },
-  //   isMongoId:{
-  //     errorMessage:'userId should be valid'
-  //   }
-  // },
   licenseNumber:{
     notEmpty:{
       errorMessage:'licenseNumber is required'
@@ -19,7 +11,7 @@ const suppliersValidationSchema={
     custom:{
       options : async function(value){
         const supplier = await Supplier.findOne({licenseNumber:value})
-        console.log("license-",supplier)
+        //console.log("license-",supplier)
         if(!supplier){
             return true
         } else{
@@ -45,7 +37,7 @@ const suppliersValidationSchema={
     custom:{
       options : async function(value){
         const accountNo = await Supplier.findOne({accNum:value})
-        console.log("accountNo-",accountNo)
+        //console.log("accountNo-",accountNo)
         if(!accountNo){
             return true
         } else{

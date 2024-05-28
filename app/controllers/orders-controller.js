@@ -52,11 +52,6 @@ ordersController.listOrderCustomer = async(req,res)=>{
                 model: 'VehicleType'
             }
         });
-
-        //console.log("orders 1-",orders[0].lineItems)
-        // if(orders){
-        //     console.log("order.lineitems:",orders.lineItems)
-        // }
         res.json(orders)    
     } catch(error){
         console.log(error)
