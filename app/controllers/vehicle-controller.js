@@ -13,8 +13,9 @@ vehicleController.create = async(req,res)=>{
         const {body} = req
         const vehicle = new Vehicle(body)
         vehicle.supplierId = req.user.id
-        vehicle.save()
-        res.status(201).json(vehicle)
+        await vehicle.save()
+        const newVehicle = await Vehicle.findById(vehicle._id).populate('vehicleTypeId',['name'])
+        res.status(201).json(newVehicle)
     } catch(error){
         console.log(error)
         res.status(500).json({error : "Internal Server Error"})
