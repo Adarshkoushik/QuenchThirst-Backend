@@ -1,6 +1,5 @@
 const Vehicle = require('../models/vehicle-model')
 const _ = require('lodash')
-//const vehicleType = require('../models/vehicleType-model')
 const {validationResult} = require('express-validator')
 const vehicleController = {}
 

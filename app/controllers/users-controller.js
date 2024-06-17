@@ -23,7 +23,6 @@ usersController.sendSMS = async(username,mobileNumber,role)=>{
     };
     try{
         const message = await client.messages.create(msgOptions);
-        //console.log(message)
     } catch(error){
         console.log(error)
     }
@@ -62,7 +61,7 @@ usersController.sendConfirmMail = (recipientMail, recipientUsername, otp) => {
             from: process.env.SENDER_EMAIL, // sender email address
             to: recipientMail,
             subject: "Registration Confirmation", // Subject line
-            html: html, // html body
+            html: html, // email body
         });
     }
     mailSend().catch(console.error)
@@ -230,7 +229,7 @@ usersController.login = async (req, res) => {
         }
         const checkPassword = await bcryptjs.compare(password,user.password)
         if(!checkPassword){
-            res.status(404).json({error:"Invalid email/password"})
+            return res.status(404).json({errors:[{msg:'Invalid Email/Password',path:"User info not correct"}]})
         }
         const tokenData = {
             id : user._id,
